@@ -14,7 +14,6 @@ import rehypePrism from '@mapbox/rehype-prism';
 import remarkToc from 'remark-toc';
 import rehypeSlug from 'rehype-slug';
 import { toc } from 'mdast-util-toc';
-import { cloudflareLoader } from '@/utils/cloudflareLoader';
 
 type Props = {
   params: {
@@ -165,5 +164,16 @@ const MyImage = ({ src, alt, ...props }: Props) => {
   return <Image loader={cloudflareLoader} src={src} alt={alt} {...props} />;
 };
 
+const normalizeSrc = src => {
+  return src.startsWith('/') ? src.slice(1) : src;
+};
+const cloudflareLoader = ({ src, width, quality }) => {
+  const params = [`width=${width}`];
+  if (quality) {
+    params.push(`quality=${quality}`);
+  }
+  const paramsString = params.join(',');
+  return `/cdn-cgi/image/${paramsString}/${normalizeSrc(src)}`;
+};
 
 export default Post;

@@ -1,6 +1,5 @@
 import Link from 'next/link';
 import Image from 'next/image';
-import { cloudflareLoader } from '@/utils/cloudflareLoader';
 
 type Props = {
   post: {
@@ -31,6 +30,18 @@ const PostCard = ({ post }: Props) => {
       </div>
     </Link>
   );
+};
+
+const normalizeSrc = src => {
+  return src.startsWith('/') ? src.slice(1) : src;
+};
+const cloudflareLoader = ({ src, width, quality }) => {
+  const params = [`width=${width}`];
+  if (quality) {
+    params.push(`quality=${quality}`);
+  }
+  const paramsString = params.join(',');
+  return `/cdn-cgi/image/${paramsString}/${normalizeSrc(src)}`;
 };
 
 export default PostCard;
