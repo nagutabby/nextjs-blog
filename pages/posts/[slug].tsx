@@ -14,6 +14,7 @@ import rehypePrism from '@mapbox/rehype-prism';
 import remarkToc from 'remark-toc';
 import rehypeSlug from 'rehype-slug';
 import { toc } from 'mdast-util-toc';
+import { cloudflareLoader } from '@/utils/cloudflareLoader';
 
 type Props = {
   params: {
@@ -161,9 +162,8 @@ const MyLink = ({ children, href }: Props) => {
 };
 
 const MyImage = ({ src, alt, ...props }: Props) => {
-  return <Image src={src} alt={alt} {...props} />;
+  return <Image loader={cloudflareLoader} src={src} alt={alt} {...props} />;
 };
-
 
 
 export default Post;

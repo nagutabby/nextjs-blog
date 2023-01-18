@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import Image from 'next/image';
+import { cloudflareLoader } from '@/utils/cloudflareLoader';
 
 type Props = {
   post: {
@@ -17,6 +18,7 @@ const PostCard = ({ post }: Props) => {
     <Link href={`/posts/${post.slug}`}>
       <div className="border rounded-lg">
         <Image
+          loader={cloudflareLoader}
           src={`/${post.frontMatter.image}`}
           width={1200}
           height={700}
