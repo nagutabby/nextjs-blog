@@ -17,7 +17,6 @@ const PostCard = ({ post }: Props) => {
     <Link href={`/posts/${post.slug}`}>
       <div className="border rounded-lg">
         <Image
-          loader={cloudflareLoader}
           src={`/${post.frontMatter.image}`}
           width={1200}
           height={700}
@@ -30,18 +29,6 @@ const PostCard = ({ post }: Props) => {
       </div>
     </Link>
   );
-};
-
-const normalizeSrc = src => {
-  return src.startsWith('/') ? src.slice(1) : src;
-};
-const cloudflareLoader = ({ src, width, quality }) => {
-  const params = [`width=${width}`];
-  if (quality) {
-    params.push(`quality=${quality}`);
-  }
-  const paramsString = params.join(',');
-  return `/cdn-cgi/image/${paramsString}/${normalizeSrc(src)}`;
 };
 
 export default PostCard;
