@@ -5,7 +5,26 @@ import PostCard from '../../components/postcard';
 
 const PAGE_SIZE = 2;
 
-const range = (start, end, length = end - start + 1) =>
+type Props = {
+  params: {
+    category: string
+    page: number
+  }
+  posts: {
+    post: {
+      slug: string
+      frontMatter: {
+        image: string
+        title: string
+        date: string
+      }
+    }
+  }
+  pages: string[]
+  current_page: number
+}
+
+const range = (start: number, end: number, length = end - start + 1) =>
   Array.from({ length }, (_, i) => start + i);
 
 export async function getStaticPaths() {
@@ -22,7 +41,7 @@ export async function getStaticPaths() {
   };
 }
 
-export async function getStaticProps({ params }) {
+export async function getStaticProps({ params }: Props) {
   const current_page = params.page;
   const files = fs.readdirSync('posts');
   const posts = files.map((fileName) => {
@@ -56,11 +75,11 @@ export async function getStaticProps({ params }) {
   };
 }
 
-const Page = ({ posts, pages, current_page }) => {
+const Page = ({ posts, pages, current_page }: Props) => {
   return (
     <div className="my-8">
       <div className="grid grid-cols-3 gap-4">
-        {posts.map((post) => (
+        {Object.values(posts).map((post) => (
           <PostCard key={post.slug} post={post} />
         ))}
       </div>

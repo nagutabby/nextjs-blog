@@ -1,8 +1,25 @@
 import fs from 'fs';
 import matter from 'gray-matter';
+import { GetStaticProps } from 'next';
 import PostCard from '../../components/postcard';
 
-export const getStaticProps = ({ params }) => {
+type Props = {
+  params: {
+    category: string
+  }
+  posts: {
+    post: {
+      slug: string
+      frontMatter: {
+        image: string
+        title: string
+        date: string
+      }
+    }
+  }
+}
+
+export const getStaticProps = ({ params }: Props) => {
   const files = fs.readdirSync('posts');
   const posts = files.map((fileName) => {
     const slug = fileName.replace(/\.md$/, '');
@@ -41,11 +58,11 @@ export const getStaticPaths = () => {
   };
 };
 
-const Category = ({ posts }) => {
+const Category = ({ posts }: Props) => {
   return (
     <div className="my-8">
       <div className="grid grid-cols-3 gap-4">
-        {posts.map((post) => (
+        {Object.values(posts).map((post) => (
           <PostCard key={post.slug} post={post} />
         ))}
       </div>

@@ -1,7 +1,12 @@
 import Header from './header';
 import Footer from './footer';
+import { ReactNode } from "react"
 
-export default function Layout({ children }: { children: any }) {
+type Props = {
+  children: ReactNode
+}
+
+export default function Layout({ children }: Props) {
   return (
     <div className="flex flex-col min-h-screen">
       <Header />

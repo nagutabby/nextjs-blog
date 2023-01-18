@@ -1,7 +1,18 @@
 import Link from 'next/link';
 import Image from 'next/image';
 
-const PostCard = ({ post }) => {
+type Props = {
+  post: {
+    slug: string
+    frontMatter: {
+      image: string
+      title: string
+      date: string
+    }
+
+  }
+}
+const PostCard = ({ post }: Props) => {
   return (
     <Link href={`/posts/${post.slug}`}>
       <div className="border rounded-lg">

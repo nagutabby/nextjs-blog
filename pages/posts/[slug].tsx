@@ -3,8 +3,7 @@ import matter from 'gray-matter';
 import Image from 'next/image';
 import { NextSeo } from 'next-seo';
 import Link from 'next/link';
-import { React } from 'react';
-import { createElement } from 'react';
+import { createElement, ReactNode } from 'react';
 import { unified } from 'unified';
 import remarkParse from 'remark-parse';
 import remarkRehype from 'remark-rehype';
@@ -16,14 +15,35 @@ import remarkToc from 'remark-toc';
 import rehypeSlug from 'rehype-slug';
 import { toc } from 'mdast-util-toc';
 
-const getToc = (options) => {
-  return (node) => {
+type Props = {
+  params: {
+    slug: string
+  }
+  toc: string
+  content: string
+  slug: string
+  frontMatter: {
+    categories: string[]
+    description: string
+    image: string
+    title: string
+    date: string
+  }
+  href: string
+  children: ReactNode
+  src: string
+  alt: string
+}
+
+
+const getToc = (options: any) => {
+  return (node: any) => {
     const result = toc(node, options);
     node.children = [result.map];
   };
 };
 
-export async function getStaticProps({ params }) {
+export async function getStaticProps({ params }: Props) {
   const file = fs.readFileSync(`posts/${params.slug}.md`, 'utf-8');
   const { data, content } = matter(file);
   const result = await unified()
@@ -40,6 +60,7 @@ export async function getStaticProps({ params }) {
       heading: '目次',
       tight: true,
     })
+    // @ts-ignore
     .use(remarkRehype)
     .use(rehypeStringify)
     .process(content);
@@ -60,7 +81,7 @@ export async function getStaticPaths() {
   };
 }
 
-const Post = ({ frontMatter, content, slug, toc }) => {
+const Post = ({ frontMatter, content, slug, toc }: Props) => {
   return (
     <>
       <NextSeo
@@ -131,7 +152,7 @@ const toReactNode = (content) => {
 };
 
 
-const MyLink = ({ children, href }) => {
+const MyLink = ({ children, href }: Props) => {
   return (
     <Link href={href}>
       {children}
@@ -139,7 +160,7 @@ const MyLink = ({ children, href }) => {
   );
 };
 
-const MyImage = ({ src, alt, ...props }) => {
+const MyImage = ({ src, alt, ...props }: Props) => {
   return <Image src={src} alt={alt} {...props} />;
 };
 

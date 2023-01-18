@@ -3,11 +3,28 @@ import matter from 'gray-matter';
 import Pagination from '../components/pagination';
 import PostCard from '../components/postcard';
 
+type Props = {
+  posts: {
+    post: {
+      slug: string
+      frontMatter: {
+        image: string
+        title: string
+        date: string
+      }
+    }
+  }
+  pages: string[]
+  current_page: number
+}
+
+
+
 const PAGE_SIZE = 2;
 
-const range = (start, end, length = end - start + 1) =>
-  Array.from({ length }, (_, i) => start + i);
-
+const range = (start: number, end: number, length = end - start + 1) => {
+  return Array.from({ length }, (_, i) => start + i);
+}
 export const getStaticProps = () => {
   const files = fs.readdirSync('posts');
   const posts = files.map((fileName) => {
@@ -34,15 +51,15 @@ export const getStaticProps = () => {
   };
 };
 
-export default function Home({ posts, pages }) {
+export default function Home({ posts, pages }: Props) {
   return (
     <div className="my-8">
       <div className="grid grid-cols-3 gap-4">
-        {posts.map((post) => (
+        {Object.values(posts).map((post) => (
           <PostCard key={post.slug} post={post} />
         ))}
       </div>
-      <Pagination pages={pages} />
+      <Pagination pages={pages} current_page={1} />
     </div>
   );
 }
