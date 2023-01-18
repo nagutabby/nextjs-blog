@@ -162,7 +162,7 @@ const MyLink = ({ children, href }: Props) => {
 };
 
 const MyImage = ({ src, alt, ...props }: Props) => {
-  return <Image loader={cloudflareLoader} src={src} alt={alt} width={500} height={500} />;
+  return <Image loader={cloudflareLoader} src={src} alt={alt} {...props} />;
 };
 
 
